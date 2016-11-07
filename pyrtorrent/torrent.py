@@ -3,6 +3,10 @@
 Torrent
 """
 import xmlrpc.client
+from datetime import (
+    datetime,
+    timedelta,
+)
 
 class Torrent(object):
     """
@@ -16,6 +20,27 @@ class Torrent(object):
     def complete(self):
         """Return True if torrent is downloaded, otherwise False"""
         return self.attribute('d.complete', is_bool=True)
+
+    @property
+    def finished(self):
+        """Return unixtime when torrent finished"""
+        return self.attribute('d.timestamp.finished')
+
+    def older_than(self, seconds=0, minutes=0, hours=0, days=0, weeks=0):
+        """Return True if torrent is complete and was finished before the specified time"""
+        finished = self.finished
+        if finished == 0:
+            return False
+        now = datetime.now()
+        then = datetime.fromtimestamp(finished)
+        extra = timedelta(
+            seconds=seconds,
+            minutes=minutes,
+            hours=hours,
+            days=days,
+            weeks=weeks,
+        )
+        return (then + extra) < now
 
     @property
     def name(self):
