@@ -105,3 +105,7 @@ class Torrent(object):
         self.directory = newdir
         move(olddir, newdir)
         self.start()
+
+    def erase(self):
+        """Erase the torrent"""
+        self.attribute('d.erase')
