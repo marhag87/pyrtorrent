@@ -18,6 +18,17 @@ class Torrent(object):
         self.torrent_hash = torrent_hash
         self.url = url
 
+    def attribute(self, attribute, *args, is_bool=False):
+        """
+        Return attribute from rTorrent xmlrpc
+        """
+        with xmlrpc.client.ServerProxy(self.url) as client:
+            result = getattr(client, attribute)(self.torrent_hash, *args)
+            if is_bool:
+                return result == 1
+            else:
+                return result
+
     @property
     def complete(self):
         """Return True if torrent is downloaded, otherwise False"""
@@ -28,6 +39,7 @@ class Torrent(object):
         """Return unixtime when torrent finished"""
         return self.attribute('d.timestamp.finished')
 
+    #pylint: disable=too-many-arguments
     def older_than(self, seconds=0, minutes=0, hours=0, days=0, weeks=0):
         """Return True if torrent is complete and was finished before the specified time"""
         finished = self.finished
@@ -71,17 +83,6 @@ class Torrent(object):
     def stop(self):
         """Stop the torrent"""
         self.attribute('d.stop')
-
-    def attribute(self, attribute, *args, is_bool=False):
-        """
-        Return attribute from rTorrent xmlrpc
-        """
-        with xmlrpc.client.ServerProxy(self.url) as client:
-            result = getattr(client, attribute)(self.torrent_hash, *args)
-            if is_bool:
-                return result == 1
-            else:
-                return result
 
     @property
     def path(self):

@@ -8,6 +8,7 @@ from pyrtorrent.torrent import (
     Torrent,
 )
 
+#pylint: disable=too-few-public-methods
 class Torrents(object):
     """
     Iterator for getting all torrents from rTorrent
