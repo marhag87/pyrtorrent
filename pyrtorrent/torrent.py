@@ -3,6 +3,8 @@
 Torrent
 """
 import xmlrpc.client
+from shutil import move
+from os.path import dirname
 from datetime import (
     datetime,
     timedelta,
@@ -80,3 +82,26 @@ class Torrent(object):
                 return result == 1
             else:
                 return result
+
+    @property
+    def path(self):
+        """Return base directory of torrent"""
+        return '{}/'.format(dirname(self.directory))
+
+    @property
+    def directory(self):
+        """Return directory of torrent"""
+        return self.attribute('d.directory')
+
+    @directory.setter
+    def directory(self, value):
+        """Set directory of torrent"""
+        self.attribute('d.directory.set', value)
+
+    def move(self, newdir):
+        """Move the torrent to a new directory"""
+        olddir = self.directory
+        self.stop()
+        self.directory = newdir
+        move(olddir, newdir)
+        self.start()
