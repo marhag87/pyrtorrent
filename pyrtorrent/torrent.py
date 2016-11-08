@@ -14,20 +14,28 @@ class Torrent(object):
     """
     Torrent object
     """
-    def __init__(self, torrent_hash, url):
+    def __init__(self, rtorrent, torrent_hash):
+        self.rtorrent = rtorrent
         self.torrent_hash = torrent_hash
-        self.url = url
 
     @property
     def complete(self):
         """Return True if torrent is downloaded, otherwise False"""
-        return self.attribute('d.complete', is_bool=True)
+        return self.rtorrent.attribute(
+            'd.complete',
+            self.torrent_hash,
+            is_bool=True,
+        )
 
     @property
     def finished(self):
         """Return unixtime when torrent finished"""
-        return self.attribute('d.timestamp.finished')
+        return self.rtorrent.attribute(
+            'd.timestamp.finished',
+            self.torrent_hash,
+        )
 
+    #pylint: disable=too-many-arguments
     def older_than(self, seconds=0, minutes=0, hours=0, days=0, weeks=0):
         """Return True if torrent is complete and was finished before the specified time"""
         finished = self.finished
@@ -47,41 +55,49 @@ class Torrent(object):
     @property
     def name(self):
         """Return name of torrent"""
-        return self.attribute('d.name')
+        return self.rtorrent.attribute(
+            'd.name',
+            self.torrent_hash,
+        )
 
     @property
     def ratio(self):
         """Return ratio of the torrent"""
-        return self.attribute('d.ratio')
+        return self.rtorrent.attribute(
+            'd.ratio',
+            self.torrent_hash,
+        )
 
     @property
     def custom1(self):
         """Get custom attribute 1 of torrent"""
-        return self.attribute('d.custom1')
+        return self.rtorrent.attribute(
+            'd.custom1',
+            self.torrent_hash,
+        )
 
     @custom1.setter
     def custom1(self, value):
         """Set custom attribute 1 of torrent"""
-        self.attribute('d.set_custom1', value)
+        self.rtorrent.attribute(
+            'd.set_custom1',
+            self.torrent_hash,
+            value,
+        )
 
     def start(self):
         """Start the torrent"""
-        self.attribute('d.start')
+        self.rtorrent.attribute(
+            'd.start',
+            self.torrent_hash,
+        )
 
     def stop(self):
         """Stop the torrent"""
-        self.attribute('d.stop')
-
-    def attribute(self, attribute, *args, is_bool=False):
-        """
-        Return attribute from rTorrent xmlrpc
-        """
-        with xmlrpc.client.ServerProxy(self.url) as client:
-            result = getattr(client, attribute)(self.torrent_hash, *args)
-            if is_bool:
-                return result == 1
-            else:
-                return result
+        self.rtorrent.attribute(
+            'd.stop',
+            self.torrent_hash,
+        )
 
     @property
     def path(self):
@@ -91,12 +107,19 @@ class Torrent(object):
     @property
     def directory(self):
         """Return directory of torrent"""
-        return self.attribute('d.directory')
+        return self.rtorrent.attribute(
+            'd.directory',
+            self.torrent_hash,
+        )
 
     @directory.setter
     def directory(self, value):
         """Set directory of torrent"""
-        self.attribute('d.directory.set', value)
+        self.rtorrent.attribute(
+            'd.directory.set',
+            self.torrent_hash,
+            value,
+        )
 
     def move(self, newdir):
         """Move the torrent to a new directory"""
@@ -108,4 +131,7 @@ class Torrent(object):
 
     def erase(self):
         """Erase the torrent"""
-        self.attribute('d.erase')
+        self.rtorrent.attribute(
+            'd.erase',
+            self.torrent_hash,
+        )

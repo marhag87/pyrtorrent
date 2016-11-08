@@ -3,6 +3,6 @@
 Module for handling xmlrpc interface of rTorrent
 """
 
-from pyrtorrent.torrents import (
-    Torrents,
+from pyrtorrent.rtorrent import (
+    Rtorrent,
 )
