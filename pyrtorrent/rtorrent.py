@@ -30,3 +30,11 @@ class Rtorrent(object):
         Add a torrent
         """
         self.attribute('load_start', torrent, is_bool=False)
+
+    def torrent_by_hash(self, torrent_hash):
+        """
+        Fetch a torrent by hash
+        """
+        for torrent in self.all_torrents():
+            if torrent.torrent_hash == torrent_hash:
+                return torrent
