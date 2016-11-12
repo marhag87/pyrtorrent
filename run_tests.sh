@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rm -rf tmp-tests
-mkdir -p tmp-tests/download
+mkdir -p tmp-tests/download/complete
 cp integration_test.torrent tmp-tests/
 echo "This is used for testing" > tmp-tests/download/README
 
@@ -15,7 +15,7 @@ if [[ -z $(sudo docker ps -f status=running -f name=pyrtorrent-integration-test 
     marhag87/rtorrent
 fi
 
-nosetests --with-coverage --cover-package=pyrtorrent --cover-html
+nosetests --with-coverage --cover-package=pyrtorrent --cover-html --cover-erase
 
 sudo docker kill pyrtorrent-integration-test > /dev/null
 sudo docker rm pyrtorrent-integration-test > /dev/null

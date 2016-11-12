@@ -1,6 +1,7 @@
 #!/bin/env python
 
 import unittest
+from os.path import isfile
 
 from pyrtorrent import (
     Rtorrent,
@@ -9,6 +10,7 @@ from pyrtorrent import (
 URL = 'http://localhost:8006'
 TORRENT = 'integration_test.torrent'
 HASH = '68F89D84E5E1FF8415B9C82FA8F3BD62469F6811'
+NAME = 'README'
 
 class test_pyrtorrent(unittest.TestCase):
     rtorrent = Rtorrent(URL)
@@ -37,3 +39,55 @@ class test_pyrtorrent(unittest.TestCase):
         # The torrent is complete
         torrent = self.rtorrent.torrent_by_hash(HASH)
         self.assertTrue(torrent.complete)
+
+        # The torrent isn't finished, as we added it locally
+        torrent = self.rtorrent.torrent_by_name(NAME)
+        self.assertEqual(
+            torrent.finished,
+            0,
+        )
+
+        # The torrent can't compare age, as it isn't finished
+        self.assertFalse(torrent.older_than(seconds=1))
+
+        # The torrent has a 0 ratio, since it was just added
+        self.assertEqual(
+            torrent.ratio,
+            0,
+        )
+
+        # The torrent has no custom1 data
+        self.assertEqual(
+            torrent.custom1,
+            '',
+        )
+
+        # We can set the custom1 data
+        torrent.custom1 = 'testing'
+        self.assertEqual(
+            torrent.custom1,
+            'testing',
+        )
+
+        # The torrent can be moved
+        self.assertEqual(
+            torrent.directory,
+            '/rtorrent/download',
+        )
+        torrent.move('/rtorrent/download/complete/')
+        self.assertEqual(
+            torrent.directory,
+            '/rtorrent/download/complete',
+        )
+        self.assertEqual(
+            torrent.attribute('d.state'),
+            1,  # Started
+        )
+
+        # Torrent is erased
+        torrent.erase()
+        torrents = self.rtorrent.all_torrents()
+        self.assertEqual(
+            torrents,
+            [],
+        )

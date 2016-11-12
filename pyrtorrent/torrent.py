@@ -4,7 +4,10 @@ Torrent
 """
 import xmlrpc.client
 from shutil import move
-from os.path import dirname
+from os.path import (
+    dirname,
+    isfile,
+)
 from datetime import (
     datetime,
     timedelta,
@@ -17,6 +20,15 @@ class Torrent(object):
     def __init__(self, rtorrent, torrent_hash):
         self.rtorrent = rtorrent
         self.torrent_hash = torrent_hash
+
+    def attribute(self, attribute, *args, is_bool=False):
+        """Return an attribute of the torrent"""
+        return self.rtorrent.attribute(
+            attribute,
+            self.torrent_hash,
+            *args,
+            is_bool=is_bool,
+        )
 
     @property
     def complete(self):
@@ -100,11 +112,6 @@ class Torrent(object):
         )
 
     @property
-    def path(self):
-        """Return base directory of torrent"""
-        return '{}/'.format(dirname(self.directory))
-
-    @property
     def directory(self):
         """Return directory of torrent"""
         return self.rtorrent.attribute(
@@ -121,12 +128,24 @@ class Torrent(object):
             value,
         )
 
+    @property
+    def base_path(self):
+        """Return full path of file or directory of torrent"""
+        return self.attribute(
+            'd.get_base_path',
+        )
+
     def move(self, newdir):
         """Move the torrent to a new directory"""
-        olddir = self.directory
+        olddir = self.base_path
         self.stop()
         self.directory = newdir
-        move(olddir, newdir)
+        self.attribute(
+            'execute.nothrow',
+            '/usr/bin/mv',
+            olddir,
+            newdir,
+        )
         self.start()
 
     def erase(self):

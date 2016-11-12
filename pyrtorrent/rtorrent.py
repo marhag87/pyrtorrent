@@ -38,3 +38,11 @@ class Rtorrent(object):
         for torrent in self.all_torrents():
             if torrent.torrent_hash == torrent_hash:
                 return torrent
+
+    def torrent_by_name(self, torrent_name):
+        """
+        Fetch a torrent by name
+        """
+        for torrent in self.all_torrents():
+            if torrent.name == torrent_name:
+                return torrent
