@@ -15,7 +15,7 @@ if [[ -z $(sudo docker ps -f status=running -f name=pyrtorrent-integration-test 
     marhag87/rtorrent
 fi
 
-nosetests
+nosetests --with-coverage --cover-package=pyrtorrent --cover-html
 
 sudo docker kill pyrtorrent-integration-test > /dev/null
 sudo docker rm pyrtorrent-integration-test > /dev/null
