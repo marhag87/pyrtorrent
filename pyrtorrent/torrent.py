@@ -40,6 +40,14 @@ class Torrent(object):
         )
 
     @property
+    def started(self):
+        """Return unixtime when torrent started"""
+        return self.rtorrent.attribute(
+            'd.timestamp.started',
+            self.torrent_hash,
+        )
+
+    @property
     def finished(self):
         """Return unixtime when torrent finished"""
         return self.rtorrent.attribute(
@@ -50,11 +58,16 @@ class Torrent(object):
     #pylint: disable=too-many-arguments
     def older_than(self, seconds=0, minutes=0, hours=0, days=0, weeks=0):
         """Return True if torrent is complete and was finished before the specified time"""
+        started = self.started
         finished = self.finished
-        if finished == 0:
+        if not self.complete:
             return False
+        if finished == 0:
+            compare_time = started
+        else:
+            compare_time = finished
         now = datetime.now()
-        then = datetime.fromtimestamp(finished)
+        then = datetime.fromtimestamp(compare_time)
         extra = timedelta(
             seconds=seconds,
             minutes=minutes,

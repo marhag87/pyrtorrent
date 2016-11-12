@@ -2,6 +2,7 @@
 
 import unittest
 from os.path import isfile
+from time import sleep
 
 from pyrtorrent import (
     Rtorrent,
@@ -40,15 +41,22 @@ class test_pyrtorrent(unittest.TestCase):
         torrent = self.rtorrent.torrent_by_hash(HASH)
         self.assertTrue(torrent.complete)
 
-        # The torrent isn't finished, as we added it locally
+        # The torrent doesn't have a finish time, as we added it locally
         torrent = self.rtorrent.torrent_by_name(NAME)
         self.assertEqual(
             torrent.finished,
             0,
         )
 
-        # The torrent can't compare age, as it isn't finished
-        self.assertFalse(torrent.older_than(seconds=1))
+        # The torrent is complete
+        self.assertTrue(torrent.complete)
+
+        # The torrent has not been finished for a day
+        self.assertFalse(torrent.older_than(days=1))
+
+        sleep(1)
+        # The torrent has been finished for a second
+        self.assertTrue(torrent.older_than(seconds=1))
 
         # The torrent has a 0 ratio, since it was just added
         self.assertEqual(
