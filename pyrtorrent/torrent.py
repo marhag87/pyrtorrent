@@ -88,10 +88,10 @@ class Torrent(object):
     @property
     def ratio(self):
         """Return ratio of the torrent"""
-        return self.rtorrent.attribute(
+        return (self.rtorrent.attribute(
             'd.ratio',
             self.torrent_hash,
-        )
+        )/1000)
 
     @property
     def custom1(self):
