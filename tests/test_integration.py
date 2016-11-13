@@ -64,6 +64,12 @@ class test_pyrtorrent(unittest.TestCase):
             0,
         )
 
+        # The torrent is 100% complete
+        self.assertEqual(
+            torrent.completed_percent,
+            100,
+        )
+
         # The torrent has no custom1 data
         self.assertEqual(
             torrent.custom1,

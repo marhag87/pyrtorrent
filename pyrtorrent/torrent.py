@@ -167,3 +167,25 @@ class Torrent(object):
             'd.erase',
             self.torrent_hash,
         )
+
+    @property
+    def bytes_done(self):
+        """Return bytes done of torrent"""
+        return self.rtorrent.attribute(
+            'd.bytes_done',
+            self.torrent_hash,
+        )
+
+    @property
+    def bytes_left(self):
+        """Return bytes left of torrent"""
+        return self.rtorrent.attribute(
+            'd.left_bytes',
+            self.torrent_hash,
+        )
+    @property
+    def completed_percent(self):
+        """Return the percentage of completion of the torrent"""
+        bytes_done = self.bytes_done
+        bytes_left = self.bytes_left
+        return int((bytes_done/(bytes_done+bytes_left))*100)
