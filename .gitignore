@@ -4,3 +4,4 @@ tmp-tests
 cover
 .coverage
 .idea
+pyrtorrent.egg-info
