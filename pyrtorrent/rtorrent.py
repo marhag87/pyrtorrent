@@ -3,6 +3,7 @@
 import xmlrpc.client
 from pyrtorrent.torrent import Torrent
 
+
 class Rtorrent(object):
     def __init__(self, url):
         self.url = url

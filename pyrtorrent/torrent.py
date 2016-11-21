@@ -2,16 +2,11 @@
 """
 Torrent
 """
-import xmlrpc.client
-from shutil import move
-from os.path import (
-    dirname,
-    isfile,
-)
 from datetime import (
     datetime,
     timedelta,
 )
+
 
 class Torrent(object):
     """
@@ -55,7 +50,7 @@ class Torrent(object):
             self.torrent_hash,
         )
 
-    #pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments
     def older_than(self, seconds=0, minutes=0, hours=0, days=0, weeks=0):
         """Return True if torrent is complete and was finished before the specified time"""
         started = self.started
@@ -183,6 +178,7 @@ class Torrent(object):
             'd.left_bytes',
             self.torrent_hash,
         )
+
     @property
     def completed_percent(self):
         """Return the percentage of completion of the torrent"""
