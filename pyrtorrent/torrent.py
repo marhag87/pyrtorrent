@@ -192,3 +192,20 @@ class Torrent(object):
             'd.get_size_bytes',
             self.torrent_hash,
         )
+
+    @property
+    def state(self):
+        return self.attribute(
+            'd.get_state',
+            self.torrent_hash,
+        )
+
+    @property
+    def status(self):
+        if self.state == 0:
+            status = "Closed"
+        elif self.state == 1 and self.complete:
+            status = "Seeding"
+        elif self.state == 1 and not self.complete:
+            status = "Downloading"
+        return status
