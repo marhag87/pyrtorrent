@@ -230,3 +230,21 @@ class Torrent(object):
             'd.get_down_rate',
             self.torrent_hash,
         )
+
+    @property
+    def peers_connected(self):
+        return self.attribute(
+            'd.get_peers_connected',
+            self.torrent_hash,
+        )
+
+    @property
+    def seeders(self):
+        return self.attribute(
+            'd.get_peers_complete',
+            self.torrent_hash,
+        )
+
+    @property
+    def leechers(self):
+        return self.peers_connected - self.seeders

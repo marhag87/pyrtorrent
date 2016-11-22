@@ -100,6 +100,12 @@ class test_pyrtorrent(unittest.TestCase):
             0,
         )
 
+        # The torrent has no leechers
+        self.assertEqual(
+            torrent.leechers,
+            0,
+        )
+
         # The torrent has no custom1 data
         self.assertEqual(
             torrent.custom1,
