@@ -194,6 +194,13 @@ class Torrent(object):
         )
 
     @property
+    def uploaded(self):
+        return self.attribute(
+            'd.get_up_total',
+            self.torrent_hash,
+        )
+
+    @property
     def state(self):
         return self.attribute(
             'd.get_state',

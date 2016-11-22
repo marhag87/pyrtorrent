@@ -82,6 +82,12 @@ class test_pyrtorrent(unittest.TestCase):
             "Seeding",
         )
 
+        # The torrent has no upload
+        self.assertEqual(
+            torrent.uploaded,
+            0,
+        )
+
         # The torrent has no custom1 data
         self.assertEqual(
             torrent.custom1,
