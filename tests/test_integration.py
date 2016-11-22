@@ -70,6 +70,12 @@ class test_pyrtorrent(unittest.TestCase):
             100,
         )
 
+        # The torrent has a size
+        self.assertEqual(
+            torrent.size,
+            25,
+        )
+
         # The torrent has no custom1 data
         self.assertEqual(
             torrent.custom1,

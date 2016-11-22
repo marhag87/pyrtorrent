@@ -185,3 +185,10 @@ class Torrent(object):
         bytes_done = self.bytes_done
         bytes_left = self.bytes_left
         return int((bytes_done/(bytes_done+bytes_left))*100)
+
+    @property
+    def size(self):
+        return self.attribute(
+            'd.get_size_bytes',
+            self.torrent_hash,
+        )
