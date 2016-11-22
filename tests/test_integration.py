@@ -88,6 +88,18 @@ class test_pyrtorrent(unittest.TestCase):
             0,
         )
 
+        # The torrent has no upload rate
+        self.assertEqual(
+            torrent.up_rate,
+            0,
+        )
+
+        # The torrent has no download rate
+        self.assertEqual(
+            torrent.down_rate,
+            0,
+        )
+
         # The torrent has no custom1 data
         self.assertEqual(
             torrent.custom1,

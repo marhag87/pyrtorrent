@@ -216,3 +216,17 @@ class Torrent(object):
         elif self.state == 1 and not self.complete:
             status = "Downloading"
         return status
+
+    @property
+    def up_rate(self):
+        return self.attribute(
+            'd.get_up_rate',
+            self.torrent_hash,
+        )
+
+    @property
+    def down_rate(self):
+        return self.attribute(
+            'd.get_down_rate',
+            self.torrent_hash,
+        )
