@@ -134,6 +134,21 @@ class test_pyrtorrent(unittest.TestCase):
             1,  # Started
         )
 
+        self.assertEqual(
+            self.rtorrent.multicall(
+                [
+                    'custom1',
+                    'hash',
+                ]
+            ),
+            [
+                [
+                    'testing',
+                    HASH,
+                ]
+            ]
+        )
+
         # Torrent is erased
         torrent.erase()
         torrents = self.rtorrent.all_torrents()

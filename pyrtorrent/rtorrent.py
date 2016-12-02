@@ -47,3 +47,13 @@ class Rtorrent(object):
         for torrent in self.all_torrents():
             if torrent.name == torrent_name:
                 return torrent
+
+    def multicall(self, params, view='main'):
+        """
+        Fetch multiple attributes for all torrents
+        """
+        attributes = ['d.multicall', view]
+        for param in params:
+            attributes.append('d.{}='.format(param))
+
+        return self.attribute(*attributes)
