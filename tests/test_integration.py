@@ -114,6 +114,7 @@ class test_pyrtorrent(unittest.TestCase):
 
         # We can set the custom1 data
         torrent.custom1 = 'testing'
+        torrent = self.rtorrent.torrent_by_hash(HASH)
         self.assertEqual(
             torrent.custom1,
             'testing',
@@ -125,6 +126,7 @@ class test_pyrtorrent(unittest.TestCase):
             '/rtorrent/download',
         )
         torrent.move('/rtorrent/download/complete/')
+        torrent = self.rtorrent.torrent_by_hash(HASH)
         self.assertEqual(
             torrent.directory,
             '/rtorrent/download/complete',
@@ -137,8 +139,8 @@ class test_pyrtorrent(unittest.TestCase):
         self.assertEqual(
             self.rtorrent.multicall(
                 [
-                    'custom1',
-                    'hash',
+                    'd.custom1',
+                    'd.hash',
                 ]
             ),
             [
