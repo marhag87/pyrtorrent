@@ -5,3 +5,4 @@ cover
 .coverage
 .idea
 pyrtorrent.egg-info
+dist
